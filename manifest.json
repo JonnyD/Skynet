@@ -1,0 +1,19 @@
+{
+    "name": "Civcraft",
+    "version": "1.0",
+    "description": "Build with more than just blocks",
+    "icons": { "16": "img/icon16.png",
+        "48": "img/icon48.png",
+        "117": "img/icon117.png" },
+    "background_page": "background.html",
+    "options_page": "options.html",
+    "browser_action": {
+        "default_icon": "img/fdricon.png",
+        "popup": "popup.html"
+    },
+    "permissions": [
+		"tabs", 
+        "notifications",
+        "http://skynet.nickg.org/"
+    ]
+}
