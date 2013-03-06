@@ -1,9 +1,13 @@
+var onlinePlayers = [];
+
 init();
 
 function init() {
 	if (!localStorage.updateInterval) {
 		localStorage.updateInterval = 1;
 	}
+	
+	fetchOnlinePlayers();
 }
 
 function HTTPRequest() {
@@ -41,4 +45,29 @@ function fetchOnlinePlayers() {
 	xmlHttp.send(null);
 
 	setTimeout(fetchOnlinePlayers, 1000 * localStorage.updateInterval);
+}
+
+function parseOnlinePlayers(data) {
+	var items = JSON.parse(data);
+
+	onlinePlayers = [];
+
+	var username;
+	var timestamp;
+	var player;
+
+	var count = 0;
+	for ( var key in items) {
+		username = key;
+		timestamp = items[key];
+
+		player = {
+			username : username,
+			loggedIn : timestamp
+		};
+
+		onlinePlayers[count] = player;
+
+		count++;
+	}
 }
