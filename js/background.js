@@ -27,3 +27,18 @@ function HTTPRequest() {
 	}
 	return xmlHttp;
 }
+
+function fetchOnlinePlayers() {
+	var xmlHttp = HTTPRequest();
+	xmlHttp.onreadystatechange = function() {
+		if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+			var response = xmlHttp.responseText;
+			parseOnlinePlayers(response);
+		}
+	};
+	var url = "http://skynet.nickg.org/online.json";
+	xmlHttp.open("GET", url, true);
+	xmlHttp.send(null);
+
+	setTimeout(fetchOnlinePlayers, 1000 * localStorage.updateInterval);
+}
