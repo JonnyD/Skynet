@@ -7,7 +7,6 @@
 
   "permissions": [
     "http://skynet.nickg.org/*",
-    "http://www.reddit.com/r/Civcraft/new/.json",
     "notifications"
   ],
   
