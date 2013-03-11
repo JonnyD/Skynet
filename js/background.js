@@ -1,4 +1,5 @@
 var onlinePlayers = [];
+var stats = [];
 
 init();
 
@@ -8,6 +9,7 @@ function init() {
 	}
 	
 	fetchOnlinePlayers();
+	fetchStats();
 }
 
 function HTTPRequest() {
@@ -70,4 +72,21 @@ function parseOnlinePlayers(data) {
 
 		count++;
 	}
+}
+
+function fetchStats() {
+	var xmlHttp = HTTPRequest();
+	xmlHttp.onreadystatechange = function() {
+		if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+			var response = xmlHttp.responseText;
+			parseStats(response);
+		}
+	};
+	var url = "http://skynet.nickg.org//stats.json?at=now";
+	xmlHttp.open("GET", url, true);
+	xmlHttp.send(null);
+}
+
+function parseStats(data) {
+    stats = JSON.parse(data);
 }
