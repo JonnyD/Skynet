@@ -1,0 +1,6 @@
+/web/web/bundles/
+/web/app/bootstrap*
+/web/app/cache/*
+/web/app/logs/*
+/web/vendor/
+/web/.idea
