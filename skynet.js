@@ -306,7 +306,6 @@ function logoutAllPlayers(timestamp, callback) {
           function(sessionId, logoutEventId, difference, callback) {
             updateSession(sessionId, logoutEventId, difference, function(updated) {
               console.log("[" + timestamp + "] " + "Ended session: " + sessionId + " for " + username + " (" + playerId +")");
-              updatenOnlineStatus(playerId, false);
               callback(1);
             });     
           }
