@@ -53,9 +53,4 @@ class AcceptHeader
     {
         return isset($this->parameters[$key]);
     }
-
-    public function isMediaRange()
-    {
-        return false !== strpos($this->value, '*');
-    }
 }
