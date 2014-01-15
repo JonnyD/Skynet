@@ -46,6 +46,11 @@ class Session
     private $logoutEvent;
 
     /**
+     * @ORM\Column(type="datetime")
+     */
+    private $timestamp;
+
+    /**
      * @ORM\Column(type="integer")
      */
     private $duration;
@@ -153,6 +158,29 @@ class Session
     public function getLogoutEvent()
     {
         return $this->logoutEvent;
+    }
+
+    /**
+     * Set timestamp
+     *
+     * @param datetime $timestamp
+     * @return Session
+     */
+    public function setTimestamp($timestamp)
+    {
+        $this->timestamp = $timestamp;
+
+        return $this;
+    }
+
+    /**
+     * Get timestamp
+     *
+     * @return datetime
+     */
+    public function getTimestamp()
+    {
+        return $this->timestamp;
     }
 
     /**
