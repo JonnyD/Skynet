@@ -7,7 +7,7 @@ var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
   password : '',
-  database : 'civplanet'
+  database : 'skynet'
 });
 connection.connect();
 
