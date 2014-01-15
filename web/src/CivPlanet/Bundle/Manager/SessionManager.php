@@ -17,6 +17,6 @@ class SessionManager
 
     public function getSessions()
     {
-        return $this->sessionRepository->findAll();
+        return $this->sessionRepository->findAllOrderedByTimestamp();
     }
 }

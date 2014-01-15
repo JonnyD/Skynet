@@ -10,7 +10,7 @@ use JMS\Serializer\Annotation\Groups;
 use JMS\Serializer\Annotation\SerializedName;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="CivPlanet\Bundle\Repository\PlayerRepository")
  * @ORM\Table(name="player")
  *
  * @ExclusionPolicy("all")

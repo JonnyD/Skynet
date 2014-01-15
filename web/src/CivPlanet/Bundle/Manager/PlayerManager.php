@@ -24,11 +24,11 @@ class PlayerManager
 
     public function getPlayers()
     {
-        return $this->playerRepository->findAll();
+        return $this->playerRepository->findAllOrderedByTimestamp();
     }
 
     public function getOnlinePlayers()
     {
-        return $this->sessionRepository->findBy(array('logoutEvent' => null));
+        return $this->sessionRepository->findOnlineOrderedByTimestamp();
     }
 }

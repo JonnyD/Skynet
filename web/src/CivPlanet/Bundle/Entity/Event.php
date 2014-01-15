@@ -10,7 +10,7 @@ use JMS\Serializer\Annotation\VirtualProperty;
 use JMS\Serializer\Annotation\SerializedName;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="CivPlanet\Bundle\Repository\EventRepository")
  * @ORM\Table(name="event")
  *
  * @ExclusionPolicy("all")

@@ -10,7 +10,7 @@ use JMS\Serializer\Annotation\VirtualProperty;
 use JMS\Serializer\Annotation\SerializedName;
 
 /**
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="CivPlanet\Bundle\Repository\SessionRepository")
  * @ORM\Table(name="session")
  *
  * @ExclusionPolicy("all")
