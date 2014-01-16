@@ -61,9 +61,9 @@ ALTER TABLE `session`
   ADD CONSTRAINT `fk_logout_event` FOREIGN KEY (`logout`) REFERENCES `event` (`id`),
   ADD CONSTRAINT `fk_session_player` FOREIGN KEY (`player_id`) REFERENCES `player` (`id`);
 ```
- - Update Skynet.js with your own MySQL connection settings:
+* Update Skynet.js with your own MySQL connection settings:
  
- ```node
+```node
  var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
@@ -75,7 +75,7 @@ connection.connect();
  
  * Update Skynet.js with your own Minecraft server settings:
  
- ```node
+```node
  var options = {
   host: "mc.civcraft.vg", // optional
   port: 25565,       // optional
@@ -83,7 +83,7 @@ connection.connect();
   password: "",          // online-mode=true servers
 };
  ```
- * If the server you are connecting to uses the plugin Herochat to manage its chat, overwrite 
+* If the server you are connecting to uses the plugin Herochat to manage its chat, overwrite 
  mineflayer/lib/plugins/chat.js with [patch/chat.js] (https://github.com/JonnyD/Skynet/blob/master/patch/chat.js)
 
 Created by [Jonathan Devine](http://jonnydevine.com)
