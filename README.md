@@ -57,4 +57,4 @@ ALTER TABLE `session`
   ADD CONSTRAINT `fk_session_player` FOREIGN KEY (`player_id`) REFERENCES `player` (`id`);
 ```
 
-Made by [Jonathan Devine](http://jonnydevine.com)
+Created by [Jonathan Devine](http://jonnydevine.com)

@@ -1,3 +1,0 @@
-Rest_Player :
-  type : rest
-  resource: "@CPBundle/Resources/config/routing_rest.yml"
