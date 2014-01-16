@@ -1,7 +1,12 @@
 Skynet-Minecraft
 ================
 
-TODO
+## Installation
+
+ - [Install mineflayer] (https://github.com/superjoe30/mineflayer) (`npm install mineflayer`)
+ - Install moment (`npm install moment`)
+ - Install mysql (`npm install mysql`)
+ - Install async (`npm install async`)
 
 [SQLFiddle](http://sqlfiddle.com/#!2/32e4e9)
 ```sql
