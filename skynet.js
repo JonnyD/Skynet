@@ -48,6 +48,7 @@ function bindEvents(bot) {
       function(playerId, eventId, callback) {
         addSession(player.username, playerId, eventId, function(sessionId) {
           console.log("[" + timestamp + "] Started session: " + sessionId + " for " + player.username + " (" + playerId +")");
+		  updateLastLogin(playerId, timestamp);
           callback(null, playerId, sessionId);
         });
       }
@@ -330,8 +331,8 @@ function createPlayer(username, timestamp, callback) {
   });
 }
     
-function updatenOnlineStatus(playerId, isOnline) {
-  connection.query("UPDATE player SET online = " + isOnline + " WHERE id = " + playerId);
+function updateLastLogin(playerId, timestamp) {
+  connection.query("UPDATE player SET last_login = " + timestamp + " WHERE id = " + playerId);
 }
     
 function getTimestamp() {

@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS `event_type` (
 CREATE TABLE IF NOT EXISTS `player` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(32) NOT NULL,
-  `online` tinyint(1) NOT NULL DEFAULT '0',
+  `last_login` timestamp,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
