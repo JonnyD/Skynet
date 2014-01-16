@@ -1,4 +1,4 @@
-Skynet-Minecraft
+Skynet
 ================
 
 ## Installation
@@ -7,7 +7,7 @@ Skynet-Minecraft
  - Install moment (`npm install moment`)
  - Install mysql (`npm install mysql`)
  - Install async (`npm install async`)
- - Create database with the [following code] (http://sqlfiddle.com/#!2/32e4e9):
+ - Create the database using the [following code] (http://sqlfiddle.com/#!2/32e4e9):
  
 ```sql
 
@@ -61,5 +61,29 @@ ALTER TABLE `session`
   ADD CONSTRAINT `fk_logout_event` FOREIGN KEY (`logout`) REFERENCES `event` (`id`),
   ADD CONSTRAINT `fk_session_player` FOREIGN KEY (`player_id`) REFERENCES `player` (`id`);
 ```
-
+ - Update Skynet.js with your own MySQL connection settings:
+ 
+ ```
+ var connection = mysql.createConnection({
+  host     : 'localhost',
+  user     : 'root',
+  password : '',
+  database : 'skynet'
+});
+connection.connect();
+```
+ 
+ - Update Skynet.js with your own Minecraft server settings:
+ 
+ ```
+ var options = {
+  host: "mc.civcraft.vg", // optional
+  port: 25565,       // optional
+  username: "", // email and password are required only for
+  password: "",          // online-mode=true servers
+};
+ ```
+ - If the server you are connecting to uses the plugin Herochat to manage its chat, overwrite 
+ mineflayer/lib/plugins/chat.js with [patch/chat.js] (https://github.com/JonnyD/Skynet/blob/master/patch/chat.js)
+ - 
 Created by [Jonathan Devine](http://jonnydevine.com)
