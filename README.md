@@ -1,4 +1,4 @@
-Skynet
+Skynet (beta)
 ================
 
 ![](https://raw.github.com/JonnyD/Skynet/master/screenshot.png)
@@ -65,7 +65,7 @@ ALTER TABLE `session`
 ```
 * Update Skynet.js with your own MySQL connection settings:
  
-```node
+```js
  var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
@@ -77,7 +77,7 @@ connection.connect();
  
  * Update Skynet.js with your own Minecraft server settings:
  
-```node
+```js
  var options = {
   host: "mc.civcraft.vg", // optional
   port: 25565,       // optional
@@ -87,5 +87,10 @@ connection.connect();
  ```
 * If the server you are connecting to uses the plugin Herochat to manage its chat, overwrite 
  mineflayer/lib/plugins/chat.js with [patch/chat.js] (https://github.com/JonnyD/Skynet/blob/master/patch/chat.js)
-
-Created by [Jonathan Devine](http://jonnydevine.com)
+ 
+### Website API
+ * See [Skynet-Web] (https://github.com/JonnyD/Skynet-Web)
+ 
+## Credits
+ * Created by [Jonathan Devine](http://jonnydevine.com)
+ * Thanks to [superjoe30] (https://github.com/superjoe30/mineflayer), [caolan] (https://github.com/caolan/async), [ttk2] (https://github.com/ttk2) ... and more
