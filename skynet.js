@@ -20,9 +20,12 @@ var options = {
 var bot = mineflayer.createBot(options)
 bindEvents(bot);
 
+var afkTimeout;
 var afk1MinuteTimeout;
 var afk5MinutesTimeout;
 var afk10MinutesTimeout;
+
+var verboseLogging = false;
 
 function bindEvents(bot) {
   bot.on('login', function() {
@@ -41,13 +44,13 @@ function bindEvents(bot) {
       },
       function(playerId, callback) {
         addEvent(playerId, 1, timestamp, function(eventId) {
-          console.log("[" + timestamp + "] " + "Created login: " + eventId + " for " + player.username + " (" + playerId +")");
+          logVerbose("[" + timestamp + "] " + "Created login: " + eventId + " for " + player.username + " (" + playerId +")");
           callback(null, playerId, eventId); 
         });
       },
       function(playerId, eventId, callback) {
         addSession(player.username, playerId, eventId, function(sessionId) {
-          console.log("[" + timestamp + "] Started session: " + sessionId + " for " + player.username + " (" + playerId +")");
+          logVerbose("[" + timestamp + "] Started session: " + sessionId + " for " + player.username + " (" + playerId +")");
 		  updateLastLogin(playerId, timestamp);
           callback(null, playerId, sessionId);
         });
@@ -68,20 +71,13 @@ function bindEvents(bot) {
       },
       function(playerId, callback) {
         addEvent(playerId, 2, timestamp, function(logoutEventId) {
-          console.log("[" + timestamp + "] " + "Created logout: " + logoutEventId + " for " + username + " (" + playerId +")");
+          logVerbose("[" + timestamp + "] " + "Created logout: " + logoutEventId + " for " + username + " (" + playerId +")");
           callback(null, playerId, logoutEventId);
         });
       },
       function(playerId, logoutEventId, callback) {
-        countActiveSessions(playerId, function(countSessions) {
-          if (countSessions > 1) {
-            console.log("!!!ERROR " + player.username + " left but there "
-              + "is more than 1 active session!");
-          }
-          console.log("Active sessions: " + countSessions);
-        });
         findSession(playerId, function(sessionId, loginEventId) {
-          console.log("[" + timestamp + "] " + "Found session: " + sessionId +" for " + username + " (" + playerId +")");
+          logVerbose("[" + timestamp + "] " + "Found session: " + sessionId +" for " + username + " (" + playerId +")");
           callback(null, playerId, sessionId, loginEventId, logoutEventId); 
         });
       },
@@ -89,21 +85,21 @@ function bindEvents(bot) {
         findEventTimestamp(loginEventId, function(loginTimestamp) {
           findEventTimestamp(logoutEventId, function(logoutTimestamp) {
             var difference = diffBetweenTimestamps(loginTimestamp, logoutTimestamp);
-            console.log("[" + timestamp + "] " + "Duration: " + difference + " for " + username);
+            logVerbose("[" + timestamp + "] " + "Duration: " + difference + " for " + username);
             callback(null, playerId, sessionId, logoutEventId, difference, callback);
           }); 
         });
       },
       function(playerId, sessionId, logoutEventId, difference, callback) {
         updateSession(sessionId, logoutEventId, difference, function(updated) {
-          console.log("[" + timestamp + "] " + "Ended session: " + sessionId + " for " + username + " (" + playerId +")");
+          logVerbose("[" + timestamp + "] " + "Ended session: " + sessionId + " for " + username + " (" + playerId +")");
         });     
       }
     ]);
   });
     
   bot.on('whisper', function(username, message, rawMessage) {
-    console.log("********** message", message, "rawMessage", rawMessage, "username", username);
+    console.log("message", message, "rawMessage", rawMessage, "username", username);
     if (username === "Gu3rr1lla") {
       if (message === " quit") {
         bot.quit();
@@ -122,11 +118,11 @@ function bindEvents(bot) {
   });
 
   bot.on('chat', function(username, message) {
-    console.log("********** chat " + username + " " + message);
+    console.log("chat " + username + " " + message);
   });
   
   bot.on('nonSpokenChat', function(message) {
-    console.log("*************************** " + message);
+    console.log("nonSpokenChat " + message);
     if (message.indexOf('AFK Plugin') >= 0) {
         var antiAfkMessage = 'Hello, I am civplanet.com, this message is to avoid AFK. Type: /ignore civplanet if it gets annoying';
         if (message.indexOf('10 seconds') >= 0) {
@@ -143,7 +139,9 @@ function bindEvents(bot) {
           afk10MinutesTimeout = setTimeout(function () {
             bot.chat(antiAfkMessage);
           }, 120 * 1000);
-        }
+        } else {
+		  bot.chat(antiAfkMessage);
+		}
     }
   });
  
@@ -171,11 +169,11 @@ function bindEvents(bot) {
   });
 
   bot.on('spawn', function() {      
-    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx I spawned");
+    console.log("I spawned");
   });
     
   bot.on('death', function() {
-    console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx I died x.x.");
+    console.log("I died x.x.");
   });
 }
 
@@ -198,14 +196,6 @@ function addEvent(playerId, type, timestamp, callback) {
   });
 }
     
-function addServerStats(tps, callback) {
-  console.log("add ss " + tps);
-  var serverStats = {tps: tps};
-  connection.query('INSERT INTO server_stats SET ?', serverStats, function(err, result) {
-    callback(result.insertId); 
-  });
-}
-    
 function findEventTimestamp(eventId, callback) {
   connection.query('SELECT timestamp AS timestamp FROM event WHERE id = ' + eventId, function(err, rows, fields) {
     if (rows.length > 0) {
@@ -217,7 +207,7 @@ function findEventTimestamp(eventId, callback) {
 function addLogoutEvent(playerId, callback) {      
   addEvent(playerId, 2, function(eventId) {
     if (eventId > 0) {
-      console.log("Created logout: (" + playerId +")");
+      logVerbose("Created logout: (" + playerId +")");
       updatenOnlineStatus(playerId, false);
     }
   });
@@ -226,7 +216,7 @@ function addLogoutEvent(playerId, callback) {
 function addSession(username, playerId, loginEventId, callback) {
   var session = { player_id: playerId, login: loginEventId };
     connection.query('INSERT INTO session SET ?', session, function(err, result) {
-    console.log("[" + getTimestamp() + "] Attempting to start session for " + username + " with eventId " + loginEventId);
+    logVerbose("[" + getTimestamp() + "] Attempting to start session for " + username + " with eventId " + loginEventId);
     callback(result.insertId); 
   });
 };
@@ -257,7 +247,7 @@ function findPlayer(username, callback) {
   connection.query('SELECT id from player where username = ?', [username], function(err, rows, fields) {
     var playerId;
     if (rows.length > 0) {
-      //console.log("[" + getTimestamp() + "] " + "Found player: " + username + " (" + playerId + ")");
+      //logVerbose("[" + getTimestamp() + "] " + "Found player: " + username + " (" + playerId + ")");
       playerId = rows[0].id;
     }
     callback(playerId);
@@ -285,13 +275,13 @@ function logoutAllPlayers(timestamp, callback) {
         async.waterfall([
           function(callback) {
             addEvent(playerId, 2, timestamp, function(logoutEventId) {
-              console.log("[" + timestamp + "] " + "Created logout: " + logoutEventId + " for " + username + " (" + playerId +")");
+              logVerbose("[" + timestamp + "] " + "Created logout: " + logoutEventId + " for " + username + " (" + playerId +")");
               callback(null, logoutEventId);
             });
           },
           function(logoutEventId, callback) {
             findSession(playerId, function(sessionId, loginEventId) {
-              console.log("[" + timestamp + "] " + "Found session: " + sessionId +" for " + username + " (" + playerId +")");
+              logVerbose("[" + timestamp + "] " + "Found session: " + sessionId +" for " + username + " (" + playerId +")");
               callback(null, sessionId, loginEventId, logoutEventId); 
             });
           },
@@ -299,7 +289,7 @@ function logoutAllPlayers(timestamp, callback) {
             findEventTimestamp(loginEventId, function(loginTimestamp) {
               findEventTimestamp(logoutEventId, function(logoutTimestamp) {
                 var difference = diffBetweenTimestamps(loginTimestamp, logoutTimestamp);
-                console.log("[" + timestamp + "] " + "Duration: " + difference + " for " + username);
+                logVerbose("[" + timestamp + "] " + "Duration: " + difference + " for " + username);
                 callback(null, sessionId, logoutEventId, difference, callback);
               }); 
             });
@@ -326,13 +316,13 @@ function createPlayer(username, timestamp, callback) {
   connection.query('INSERT INTO player SET ?', newPlayer, function(err, result) {
     var playerId;
     playerId = result.insertId;
-    console.log("[" + timestamp + "] " + "Created player: " + username + " (" + playerId + ")");
+    logVerbose("[" + timestamp + "] " + "Created player: " + username + " (" + playerId + ")");
     callback(playerId);
   });
 }
     
 function updateLastLogin(playerId, timestamp) {
-  connection.query("UPDATE player SET last_login = " + timestamp + " WHERE id = " + playerId);
+  connection.query("UPDATE player SET last_login = '" + timestamp + "' WHERE id = " + playerId);
 }
     
 function getTimestamp() {
@@ -368,4 +358,10 @@ function clearTimeouts() {
   clearTimeout(afk1MinuteTimeout);
   clearTimeout(afk5MinutesTimeout);
   clearTimeout(afk10MinutesTimeout);
+}
+
+function logVerbose(message) {
+  if (verboseLogging) {
+    logVerbose(message);
+  }  
 }
