@@ -28,6 +28,7 @@ class Player
      * @ORM\Column(type="string")
      *
      * @Expose
+     * @Groups({"list", "online"})
      */
     private $username;
 
@@ -38,6 +39,15 @@ class Player
      * @SerializedName("joined")
      */
     private $timestamp;
+
+    /**
+     * @ORM\Column(type="datetime", name="last_login")
+     *
+     * @Expose
+     * @Groups({"list", "online"})
+     * @SerializedName("lastLogin")
+     */
+    private $lastLogin;
 
     /**
      * @ORM\OneToMany(targetEntity="Event", mappedBy="player", cascade="persist")
@@ -99,18 +109,41 @@ class Player
     public function setTimestamp($timestamp)
     {
         $this->timestamp = $timestamp;
-    
+
         return $this;
     }
 
     /**
      * Get timestamp
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getTimestamp()
     {
         return $this->timestamp;
+    }
+
+    /**
+     * Set lastLogin
+     *
+     * @param \DateTime $lastLogin
+     * @return Player
+     */
+    public function setLastLogin($lastLogin)
+    {
+        $this->lastLogin = $lastLogin;
+
+        return $this;
+    }
+
+    /**
+     * Get lastLogin
+     *
+     * @return \DateTime
+     */
+    public function getLastLogin()
+    {
+        return $this->lastLogin;
     }
 
     /**

@@ -32,6 +32,9 @@ class APIPlayerController extends Controller
         return array("players" => $players);
     }
 
+    /**
+     * @View(serializerGroups={"online"})
+     */
     public function getOnlineAction()
     {
         $playerManager = $this->get('civplanet.player_manager');
