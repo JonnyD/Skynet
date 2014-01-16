@@ -3,11 +3,11 @@ Skynet
 
 ## Installation
 
- - [Install mineflayer] (https://github.com/superjoe30/mineflayer) (`npm install mineflayer`)
- - Install moment (`npm install moment`)
- - Install mysql (`npm install mysql`)
- - Install async (`npm install async`)
- - Create the database using the [following code] (http://sqlfiddle.com/#!2/32e4e9):
+ * [Install mineflayer] (https://github.com/superjoe30/mineflayer) (`npm install mineflayer`)
+ * Install moment (`npm install moment`)
+ * Install mysql (`npm install mysql`)
+ * Install async (`npm install async`)
+ * Create the database using the [following code] (http://sqlfiddle.com/#!2/32e4e9):
  
 ```sql
 
@@ -63,7 +63,7 @@ ALTER TABLE `session`
 ```
  - Update Skynet.js with your own MySQL connection settings:
  
- ```
+ ```node
  var connection = mysql.createConnection({
   host     : 'localhost',
   user     : 'root',
@@ -73,9 +73,9 @@ ALTER TABLE `session`
 connection.connect();
 ```
  
- - Update Skynet.js with your own Minecraft server settings:
+ * Update Skynet.js with your own Minecraft server settings:
  
- ```
+ ```node
  var options = {
   host: "mc.civcraft.vg", // optional
   port: 25565,       // optional
@@ -83,7 +83,7 @@ connection.connect();
   password: "",          // online-mode=true servers
 };
  ```
- - If the server you are connecting to uses the plugin Herochat to manage its chat, overwrite 
+ * If the server you are connecting to uses the plugin Herochat to manage its chat, overwrite 
  mineflayer/lib/plugins/chat.js with [patch/chat.js] (https://github.com/JonnyD/Skynet/blob/master/patch/chat.js)
- - 
+
 Created by [Jonathan Devine](http://jonnydevine.com)
