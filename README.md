@@ -8,6 +8,7 @@ Skynet-Minecraft
  - Install mysql (`npm install mysql`)
  - Install async (`npm install async`)
  - Create database with the [following code] (http://sqlfiddle.com/#!2/32e4e9):
+ 
 ```sql
 
 CREATE DATABASE IF NOT EXISTS `skynet`;
