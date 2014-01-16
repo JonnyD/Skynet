@@ -91,6 +91,9 @@ connection.connect();
 ### Website API
  * See [Skynet-Web] (https://github.com/JonnyD/Skynet-Web)
  
+## Examples
+* [http://civplanet.com] (http://civplanet.com)
+ 
 ## Todo
 TODO
  
