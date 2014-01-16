@@ -1,6 +1,8 @@
 Skynet (beta)
 ================
 
+A Minecraft bot for logging player activity on multiplayer servers.
+
 ![](https://raw.github.com/JonnyD/Skynet/master/screenshot.png)
 
 ## Installation
@@ -99,4 +101,4 @@ TODO
  
 ## Credits
  * Created by [Jonathan Devine](http://jonnydevine.com)
- * Thanks to [superjoe30] (https://github.com/superjoe30/mineflayer), [caolan] (https://github.com/caolan/async), [ttk2] (https://github.com/ttk2) ... and more
+ * Standing on the shoulders of giants. Thanks to [superjoe30] (https://github.com/superjoe30/mineflayer), [caolan] (https://github.com/caolan/async), [ttk2] (https://github.com/ttk2) ... and more
