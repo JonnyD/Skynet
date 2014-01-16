@@ -1,6 +1,8 @@
 Skynet
 ================
 
+![](https://raw.github.com/JonnyD/Skynet/master/screenshot.png)
+
 ## Installation
 
  * [Install mineflayer] (https://github.com/superjoe30/mineflayer) (`npm install mineflayer`)
