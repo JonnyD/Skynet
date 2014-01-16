@@ -8,13 +8,11 @@ class PlayerManager
 {
     private $entityManager;
     private $playerRepository;
-    private $sessionRepository;
 
     public function __construct(EntityManager $entityManager)
     {
         $this->entityManager = $entityManager;
         $this->playerRepository = $entityManager->getRepository('CPBundle:Player');
-        $this->sessionRepository = $entityManager->getRepository('CPBundle:Session');
     }
 
     public function getPlayer($username)
@@ -29,6 +27,6 @@ class PlayerManager
 
     public function getOnlinePlayers()
     {
-        return $this->sessionRepository->findOnlineOrderedByTimestamp();
+        return $this->playerRepository->findOnlineOrderedByTimestamp();
     }
 }

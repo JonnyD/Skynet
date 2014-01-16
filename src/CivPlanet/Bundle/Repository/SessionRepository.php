@@ -14,13 +14,4 @@ class SessionRepository extends EntityRepository
             )
             ->getResult();
     }
-
-    public function findOnlineOrderedByTimestamp()
-    {
-        return $this->getEntityManager()
-            ->createQuery(
-                'SELECT s FROM CPBundle:Session s WHERE s.logoutEvent IS NULL ORDER BY s.timestamp DESC'
-            )
-            ->getResult();
-    }
 }

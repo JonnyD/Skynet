@@ -14,4 +14,16 @@ class PlayerRepository extends EntityRepository
             )
             ->getResult();
     }
+
+    public function findOnlineOrderedByTimestamp()
+    {
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT p FROM CPBundle:Player p, CPBundle:Session s
+                 WHERE s.logoutEvent IS NULL and s.player = p.id
+                 ORDER BY s.timestamp DESC'
+            )
+            ->getResult();
+    }
+
 }
