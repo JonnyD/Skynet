@@ -30,6 +30,7 @@ var verboseLogging = false;
 function bindEvents(bot) {
   bot.on('login', function() {
     console.log("I logged in.");
+	startAfkTimeout();
   });
     
   bot.on('playerJoined', function(player) {
@@ -140,8 +141,8 @@ function bindEvents(bot) {
             bot.chat(antiAfkMessage);
           }, 120 * 1000);
         } else {
-		  bot.chat(antiAfkMessage);
-		}
+          bot.chat(antiAfkMessage);
+        }
     }
   });
  
@@ -355,9 +356,30 @@ function diffBetweenTimestamps(timestamp1, timestamp2) {
 }
 
 function clearTimeouts() {
+  clearTimeout(afkTimeout);
   clearTimeout(afk1MinuteTimeout);
   clearTimeout(afk5MinutesTimeout);
   clearTimeout(afk10MinutesTimeout);
+}
+
+var start;
+var nextAt;
+function startAfkTimeout() {
+  if (!start) {
+    start = new Date().getTime();
+    nextAt = start;
+  }
+  nextAt += 30 * 1000;
+    
+  bot.setControlState('jump', true);
+  bot.setControlState('jump', false);
+  console.log("[" + getTimestamp() + "] jumped");
+    
+  afkTimeout = setTimeout(startAfkTimeout, nextAt - new Date().getTime());
+}
+
+function stopAfkTimeout() {
+  clearTimeout(afkIimeout);
 }
 
 function logVerbose(message) {
