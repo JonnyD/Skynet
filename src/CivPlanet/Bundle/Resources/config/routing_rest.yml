@@ -3,6 +3,11 @@ players:
   resource: "CPBundle:APIPlayer"
   name_prefix:  api_
 
+player:
+  type: rest
+  resource: "CPBundle:APIPlayer"
+  name_prefix: api_
+
 sessions:
   type: rest
   resource: "CPBundle:APISession"

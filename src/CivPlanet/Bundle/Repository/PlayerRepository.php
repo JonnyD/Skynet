@@ -21,8 +21,22 @@ class PlayerRepository extends EntityRepository
             ->createQuery(
                 'SELECT p FROM CPBundle:Player p, CPBundle:Session s
                  WHERE s.logoutEvent IS NULL and s.player = p.id
-                 ORDER BY s.timestamp DESC'
+                 ORDER BY s.loginTimestamp DESC'
             )
+            ->getResult();
+    }
+
+    public function findOnlineAtTimestamp($timestamp)
+    {
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT p FROM CPBundle:Player p, CPBundle:Session s
+                 WHERE s.loginTimestamp <= :thetimestamp
+                 AND s.logoutTimestamp >= :thetimestamp
+                 AND s.player = p.id
+                 ORDER BY s.logoutTimestamp DESC'
+            )
+            ->setParameter('thetimestamp', $timestamp)
             ->getResult();
     }
 

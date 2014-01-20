@@ -4,6 +4,8 @@ namespace CivPlanet\Bundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use FOS\RestBundle\Controller\Annotations\View;
+use FOS\RestBundle\Request\ParamFetcher;
+use FOS\RestBundle\Controller\Annotations\QueryParam;
 
 class APIPlayerController extends Controller
 {
@@ -34,12 +36,25 @@ class APIPlayerController extends Controller
 
     /**
      * @View(serializerGroups={"online"})
+     * @QueryParam(name="at", nullable=true)
      */
-    public function getOnlineAction()
+    public function getOnlineAction(ParamFetcher $paramFetcher)
     {
+        foreach ($paramFetcher->all() as $criterionName => $criterionValue) {
+            $timestamp = $criterionValue;
+        }
+
         $playerManager = $this->get('civplanet.player_manager');
-        $players = $playerManager->getOnlinePlayers();
+        $players = $playerManager->getOnlinePlayers($timestamp);
 
         return array("online" => $players);
+    }
+
+    public function getPlayerAction($username)
+    {
+        $playerManager = $this->get('civplanet.player_manager');
+        $player = $playerManager->getPlayer($username);
+
+        return array("player" => $player);
     }
 }

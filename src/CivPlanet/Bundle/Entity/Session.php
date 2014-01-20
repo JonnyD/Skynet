@@ -40,10 +40,20 @@ class Session
     private $loginEvent;
 
     /**
+     * @ORM\Column(type="datetime", name="login_timestamp")
+     */
+    private $loginTimestamp;
+
+    /**
      * @ORM\OneToOne(targetEntity="Event")
      * @ORM\JoinColumn(name="logout", referencedColumnName="id")
      **/
     private $logoutEvent;
+
+    /**
+     * @ORM\Column(type="datetime", name="logout_timestamp")
+     */
+    private $logoutTimestamp;
 
     /**
      * @ORM\Column(type="datetime")
@@ -138,6 +148,29 @@ class Session
     }
 
     /**
+     * Set loginTimestamp
+     *
+     * @param datetime $timestamp
+     * @return Session
+     */
+    public function setLoginTimestamp($timestamp)
+    {
+        $this->loginTimestamp = $timestamp;
+
+        return $this;
+    }
+
+    /**
+     * Get loginTimestamp
+     *
+     * @return datetime $timestamp
+     */
+    public function getLoginTimestamp()
+    {
+        return $this->loginTimestamp;
+    }
+
+    /**
      * Set logoutEvent
      *
      * @param \CivPlanet\Bundle\Entity\Event $logoutEvent
@@ -158,6 +191,29 @@ class Session
     public function getLogoutEvent()
     {
         return $this->logoutEvent;
+    }
+
+    /**
+     * Set logoutTimestamp
+     *
+     * @param datetime $timestamp
+     * @return Session
+     */
+    public function setLogoutTimestamp($timestamp)
+    {
+        $this->logoutTimestamp = $timestamp;
+
+        return $this;
+    }
+
+    /**
+     * Get logoutTimestamp
+     *
+     * @return datetime
+     */
+    public function getLogoutTimestmap()
+    {
+        return $this->logoutTimestamp;
     }
 
     /**
