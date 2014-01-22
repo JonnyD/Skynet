@@ -17,15 +17,23 @@ var options = {
   username: "", // email and password are required only for
   password: "",          // online-mode=true servers
 };
-var bot = mineflayer.createBot(options)
-bindEvents(bot);
+connect();
 
+var antiAfkMessage = 'Hello, I am civplanet.com, this message is to avoid AFK. Type: /ignore civplanet if it gets annoying';
+var verboseLogging = true;
 var afkTimeout;
 var afk1MinuteTimeout;
 var afk5MinutesTimeout;
 var afk10MinutesTimeout;
 
-var verboseLogging = false;
+function connect() {
+try {
+  bot = mineflayer.createBot(options);
+  bindEvents(bot);
+  } catch (e) {
+    console.log("error");
+  }
+}
 
 function bindEvents(bot) {
   bot.on('login', function() {
@@ -50,9 +58,9 @@ function bindEvents(bot) {
         });
       },
       function(playerId, eventId, callback) {
-        addSession(player.username, playerId, eventId, function(sessionId) {
+        addSession(player.username, playerId, timestamp, eventId, function(sessionId) {
           logVerbose("[" + timestamp + "] Started session: " + sessionId + " for " + player.username + " (" + playerId +")");
-		  updateLastLogin(playerId, timestamp);
+          updateLastLogin(playerId, timestamp);
           callback(null, playerId, sessionId);
         });
       }
@@ -87,12 +95,12 @@ function bindEvents(bot) {
           findEventTimestamp(logoutEventId, function(logoutTimestamp) {
             var difference = diffBetweenTimestamps(loginTimestamp, logoutTimestamp);
             logVerbose("[" + timestamp + "] " + "Duration: " + difference + " for " + username);
-            callback(null, playerId, sessionId, logoutEventId, difference, callback);
+            callback(null, playerId, sessionId, logoutEventId, difference);
           }); 
         });
       },
       function(playerId, sessionId, logoutEventId, difference, callback) {
-        updateSession(sessionId, logoutEventId, difference, function(updated) {
+        updateSession(sessionId, logoutEventId, timestamp, difference, function(updated) {
           logVerbose("[" + timestamp + "] " + "Ended session: " + sessionId + " for " + username + " (" + playerId +")");
         });     
       }
@@ -103,14 +111,18 @@ function bindEvents(bot) {
     console.log("message", message, "rawMessage", rawMessage, "username", username);
     if (username === "Gu3rr1lla") {
       if (message === " quit") {
-        bot.quit();
         clearTimeouts();
+        bot.quit();
         console.log("logging out all players");
         setTimeout(function () {
+            try {
           logoutAllPlayers(getTimestamp(), function(finished) {
             console.log("logged out all players " + finished);
           });
-        }, 30 * 1000);;
+          } catch (er) {
+            console.log("er");   
+          }
+        }, 30 * 1000);
       }
       if (message === " restart") {
         
@@ -125,7 +137,6 @@ function bindEvents(bot) {
   bot.on('nonSpokenChat', function(message) {
     console.log("nonSpokenChat " + message);
     if (message.indexOf('AFK Plugin') >= 0) {
-        var antiAfkMessage = 'Hello, I am civplanet.com, this message is to avoid AFK. Type: /ignore civplanet if it gets annoying';
         if (message.indexOf('10 seconds') >= 0) {
             bot.chat(antiAfkMessage);
         } else if (message.indexOf('1 minute') >= 0) {
@@ -148,23 +159,23 @@ function bindEvents(bot) {
  
   bot.on('kicked', function(reason) {
     console.log("I got kicked for", reason, "lol");
-
-    var timestamp = getTimestamp();
+          clearTimeouts();
+	
+	var timestamp = getTimestamp();
       async.series([
         function(callback) {
-          clearTimeouts();
+		  
           console.log("logging out all players");
-          setTimeout(function () {
+        setTimeout(function () {
             logoutAllPlayers(timestamp, function(finished) {
               console.log("logged out all players " + finished);
               callback();
             });
-          }, 30 * 1000);
+			}, 30 * 1000);
         },
         function(callback) {
-          bot = mineflayer.createBot(options);
-          bindEvents(bot);
-          callback();
+		  //connect();
+		  callback();
         }
       ]);
   });
@@ -209,22 +220,22 @@ function addLogoutEvent(playerId, callback) {
   addEvent(playerId, 2, function(eventId) {
     if (eventId > 0) {
       logVerbose("Created logout: (" + playerId +")");
-      updatenOnlineStatus(playerId, false);
     }
   });
 }
     
-function addSession(username, playerId, loginEventId, callback) {
-  var session = { player_id: playerId, login: loginEventId };
-    connection.query('INSERT INTO session SET ?', session, function(err, result) {
+function addSession(username, playerId, timestamp, loginEventId, callback) {
+  var session = { player_id: playerId, login: loginEventId, login_timestamp: timestamp };
+  connection.query('INSERT INTO session SET ?', session, function(err, result) {
     logVerbose("[" + getTimestamp() + "] Attempting to start session for " + username + " with eventId " + loginEventId);
     callback(result.insertId); 
   });
-};
+}
     
-function updateSession(sessionId, logoutEventId, difference, callback) {
-  connection.query("UPDATE session SET logout = " + logoutEventId + ", duration = " + difference + " WHERE id = " + sessionId, function(err, result) {
-    callback(1);
+function updateSession(sessionId, logoutEventId, logoutTimestamp, difference, callback) {
+  var session = { id: sessionId, logout: logoutEventId, duration: difference, logoutTimestamp: logoutTimestamp };
+  connection.query("UPDATE session SET logout = :logoutEventId, duration = :duration, logout_timestamp = :logoutTimestamp WHERE id = :sessionId", session, function(err, result) {
+	callback(1);
   });  
 }
     
@@ -234,7 +245,7 @@ function findSession(playerId, callback) {
       callback(rows[0].session_id, rows[0].loginEventId);
     }
   });  
-};
+}
 
 function countActiveSessions(playerId, callback) {
   connection.query('SELECT count(*) as count_sessions FROM session WHERE logout IS NULL AND player_id = ' + playerId, function(error, rows, fields) {
@@ -256,18 +267,19 @@ function findPlayer(username, callback) {
 }
     
 function findOnlinePlayers(callback) {
+console.log("hello");
   connection.query('SELECT * FROM session s, player p WHERE p.id = s.player_id AND logout IS NULL', function(error, rows, fields) {
-    var results;
     if (rows.length > 0) {
-      results = rows;
+      callback(rows);
     }
-    callback(results);
   });
 }
     
 function logoutAllPlayers(timestamp, callback) {
+console.log("logout");
   var counter = 0;
   findOnlinePlayers(function(sessions) {
+    logVerbose("[" + timestamp + "] Sessions found: " + sessions.length);
     if (sessions.length > 0) {
       sessions.forEach(function(session) {
         var playerId = session.player_id;
@@ -291,22 +303,24 @@ function logoutAllPlayers(timestamp, callback) {
               findEventTimestamp(logoutEventId, function(logoutTimestamp) {
                 var difference = diffBetweenTimestamps(loginTimestamp, logoutTimestamp);
                 logVerbose("[" + timestamp + "] " + "Duration: " + difference + " for " + username);
-                callback(null, sessionId, logoutEventId, difference, callback);
+                callback(null, sessionId, logoutEventId, difference);
               }); 
             });
           },
           function(sessionId, logoutEventId, difference, callback) {
-            updateSession(sessionId, logoutEventId, difference, function(updated) {
-              console.log("[" + timestamp + "] " + "Ended session: " + sessionId + " for " + username + " (" + playerId +")");
-              callback(1);
-            });     
+            updateSession(sessionId, logoutEventId, timestamp, difference, function(finished) {
+                console.log("sessionId " + sessionId);
+              //console.log("[" + timestamp + "] Ended session: " + sessionId + " for " + username + " (" + playerId + ")");	 
+              console.log("affected rows " + finished);
+              callback(null, finished);
+			}); 		
           }
-        ], function() {
-          counter = counter + 1;
-          if (counter == sessions.length) {
-            callback(1);
-          }
-        });
+        ], function(err, result) {
+		  counter = counter + 1;
+		  if (counter === sessions.length) {
+		    callback(1);
+		  }
+	    });
       });
     }
   });
@@ -378,12 +392,8 @@ function startAfkTimeout() {
   afkTimeout = setTimeout(startAfkTimeout, nextAt - new Date().getTime());
 }
 
-function stopAfkTimeout() {
-  clearTimeout(afkIimeout);
-}
-
 function logVerbose(message) {
   if (verboseLogging) {
-    logVerbose(message);
+    console.log(message);
   }  
 }
