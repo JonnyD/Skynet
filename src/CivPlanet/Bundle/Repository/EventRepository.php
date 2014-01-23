@@ -14,4 +14,16 @@ class EventRepository extends EntityRepository
             )
             ->getResult();
     }
+
+    public function findAllByUsername($username)
+    {
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT e FROM CPBundle:Event e, CPBundle:Player p
+                WHERE e.player = p.id AND p.username = :username
+                ORDER BY e.timestamp DESC'
+            )
+            ->setParameter("username", $username)
+            ->getResult();
+    }
 }

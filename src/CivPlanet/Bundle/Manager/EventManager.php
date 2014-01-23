@@ -19,4 +19,9 @@ class EventManager
     {
         return $this->eventRepository->findAllOrderedByTimestamp();
     }
+
+    public function getEventsByUsername($username)
+    {
+        return $this->eventRepository->findAllByUsername($username);
+    }
 }
