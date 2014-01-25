@@ -12,23 +12,29 @@ class APIEventController extends Controller
 
     /**
      * @QueryParam(name="username", nullable=true)
+     * @QueryParam(name="from", nullable=true)
+     * @QueryParam(name="to", nullable=true)
+     * @QueryParam(name="type", nullable=true)
      */
     public function getEventsAction(ParamFetcher $paramFetcher)
     {
+        $params = array();
         foreach ($paramFetcher->all() as $criterionName => $criterionValue) {
-            $username = $criterionValue;
+            if (isset($criterionValue) && $criterionValue != null) {
+                if ($criterionName === 'username') {
+                    $params['username'] = $criterionValue;
+                } else if ($criterionName === 'type') {
+                    $params['type'] = $criterionValue;
+                } else if ($criterionName === 'from') {
+                    $params['from'] = $criterionValue;
+                } else if ($criterionName === 'to') {
+                    $params['to'] = $criterionValue;
+                }
+            }
         }
-
-        print_r($username);
 
         $eventManager = $this->get('civplanet.event_manager');
-        $events = array();
-        if ($username != null && !empty($username) && $username != "") {
-            print_r("hello");
-            $events = $eventManager->getEventsByUsername($username);
-        } else {
-            $events = $eventManager->getEvents();
-        }
+        $events = $eventManager->getEvents($params);
 
         return array("events" => $events);
     }

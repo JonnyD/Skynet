@@ -15,13 +15,11 @@ class EventManager
         $this->eventRepository = $entityManager->getRepository('CPBundle:Event');
     }
 
-    public function getEvents()
+    public function getEvents($params)
     {
-        return $this->eventRepository->findAllOrderedByTimestamp();
-    }
-
-    public function getEventsByUsername($username)
-    {
-        return $this->eventRepository->findAllByUsername($username);
+        if ($params) {
+            return $this->eventRepository->findEventsByParams($params);
+        }
+        return $this->eventRepository->findEvents();
     }
 }
