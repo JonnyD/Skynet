@@ -15,6 +15,11 @@ class EventManager
         $this->eventRepository = $entityManager->getRepository('CPBundle:Event');
     }
 
+    public function getEvent($id)
+    {
+        return $this->eventRepository->find($id);
+    }
+
     public function getEvents($params)
     {
         if ($params) {

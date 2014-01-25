@@ -38,4 +38,12 @@ class APIEventController extends Controller
 
         return array("events" => $events);
     }
+
+    public function getEventAction($id)
+    {
+        $eventManager = $this->get('civplanet.event_manager');
+        $event = $eventManager->getEvent($id);
+
+        return array("event" => $event);
+    }
 }
