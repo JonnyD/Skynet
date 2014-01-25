@@ -23,7 +23,7 @@ class Event
      * @ORM\GeneratedValue(strategy="AUTO")
      *
      * @Expose
-     * @SerializedName("eventId")
+     * @SerializedName("event_id")
      */
     private $id;
 

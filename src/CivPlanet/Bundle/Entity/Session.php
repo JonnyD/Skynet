@@ -23,7 +23,7 @@ class Session
      * @ORM\GeneratedValue(strategy="AUTO")
      *
      * @Expose
-     * @SerializedName("sessionId")
+     * @SerializedName("session_id")
      */
     private $id;
 
@@ -228,12 +228,12 @@ class Session
      * Get loginEvent for API
      *
      * @VirtualProperty
-     * @SerializedName("login")
+     * @SerializedName("login_event")
      */
     public function getAPILoginEvent()
     {
         return array(
-            "eventId" => $this->loginEvent->getId(),
+            "event_id" => $this->loginEvent->getId(),
             "timestamp" => $this->loginEvent->getTimestamp(),
         );
     }
@@ -242,18 +242,18 @@ class Session
      * Get logoutEvent for API
      *
      * @VirtualProperty
-     * @SerializedName("logout")
+     * @SerializedName("logout_event")
      */
     public function getAPILogoutEvent()
     {
         $logoutEvent = array(
-            "eventId" => null,
+            "event_id" => null,
             "timestamp" => null,
         );
 
         if ($this->logoutEvent != null) {
             $logoutEvent = array(
-                "eventId" => $this->logoutEvent->getId(),
+                "event_id" => $this->logoutEvent->getId(),
                 "timestamp" => $this->logoutEvent->getTimestamp(),
             );
         }

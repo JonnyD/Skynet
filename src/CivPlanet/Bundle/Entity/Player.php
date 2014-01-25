@@ -45,7 +45,7 @@ class Player
      *
      * @Expose
      * @Groups({"list", "online"})
-     * @SerializedName("lastLogin")
+     * @SerializedName("last_login")
      */
     private $lastLogin;
 
@@ -54,7 +54,7 @@ class Player
      *
      * @Expose
      * @Groups({"list", "online"})
-     * @SerializedName("lastLogout")
+     * @SerializedName("last_logout")
      */
     private $lastLogout;
 
