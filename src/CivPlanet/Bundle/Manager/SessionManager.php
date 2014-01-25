@@ -20,8 +20,11 @@ class SessionManager
         return $this->sessionRepository->find($id);
     }
 
-    public function getSessions()
+    public function getSessions($params)
     {
-        return $this->sessionRepository->findAllOrderedByTimestamp();
+        if ($params) {
+            return $this->sessionRepository->findSessionsByParams($params);
+        }
+        return $this->sessionRepository->findSessions();
     }
 }

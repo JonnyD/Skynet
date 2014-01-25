@@ -4,6 +4,8 @@ namespace CivPlanet\Bundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use FOS\RestBundle\Controller\Annotations\View;
+use FOS\RestBundle\Request\ParamFetcher;
+use FOS\RestBundle\Controller\Annotations\QueryParam;
 
 class APISessionController extends Controller
 {
@@ -16,10 +18,22 @@ class APISessionController extends Controller
         return array('session' => $session);
     }
 
-    public function getSessionsAction()
+    /**
+     * @QueryParam(name="username", nullable=true)
+     */
+    public function getSessionsAction(ParamFetcher $paramFetcher)
     {
+        $params = array();
+        foreach ($paramFetcher->all() as $criterionName => $criterionValue) {
+            if (isset($criterionValue) && $criterionValue != null) {
+                if ($criterionName === 'username') {
+                    $params['username'] = $criterionValue;
+                }
+            }
+        }
+
         $sessionManager = $this->get('civplanet.session_manager');
-        $sessions = $sessionManager->getSessions();
+        $sessions = $sessionManager->getSessions($params);
 
         return array('sessions' => $sessions);
     }
