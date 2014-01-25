@@ -10,7 +10,8 @@ class SessionRepository extends EntityRepository
     {
         return $this->getEntityManager()
             ->createQuery(
-                'SELECT s FROM CPBundle:Session s ORDER BY s.timestamp DESC'
+                'SELECT s FROM CPBundle:Session s
+                ORDER BY s.loginTimestamp DESC'
             )
             ->getResult();
     }

@@ -15,6 +15,11 @@ class SessionManager
         $this->sessionRepository = $entityManager->getRepository('CPBundle:Session');
     }
 
+    public function getSession($id)
+    {
+        return $this->sessionRepository->find($id);
+    }
+
     public function getSessions()
     {
         return $this->sessionRepository->findAllOrderedByTimestamp();
