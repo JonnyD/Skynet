@@ -15,7 +15,7 @@ class PlayerRepository extends EntityRepository
             ->getResult();
     }
 
-    public function findOnlineOrderedByTimestamp()
+    public function findPlayersOnline()
     {
         return $this->getEntityManager()
             ->createQuery(
@@ -26,18 +26,35 @@ class PlayerRepository extends EntityRepository
             ->getResult();
     }
 
-    public function findOnlineAtTimestamp($timestamp)
+    public function findPlayersOnlineByParams($params)
     {
-        return $this->getEntityManager()
-            ->createQuery(
-                'SELECT p FROM CPBundle:Player p, CPBundle:Session s
-                 WHERE s.loginTimestamp <= :thetimestamp
-                 AND s.logoutTimestamp >= :thetimestamp
-                 AND s.player = p.id
-                 ORDER BY s.logoutTimestamp DESC'
-            )
-            ->setParameter('thetimestamp', $timestamp)
-            ->getResult();
-    }
+        $qb = $this->getEntityManager()->createQueryBuilder();
 
+        $query = $qb->select('p')
+            ->from('CPBundle:Player', 'p')
+            ->innerJoin('p.sessions', 's')
+            ->orderBy('s.loginTimestamp', 'DESC');
+
+        if (isset($params['at'])) {
+            $qb->andWhere('s.loginTimestamp <= :at
+                AND s.logoutTimestamp >= :at')
+                ->setParameter('at', $params['at']);
+        } else {
+            if (isset($params['from']) && isset($params['to'])) {
+                $qb->andWhere('(s.loginTimestamp >= :from AND s.logoutTimestamp <= :to)
+                    OR (s.loginTimestamp <= :from AND s.logoutTimestamp >= :from)
+                    OR (s.loginTimestamp <= :to AND s.logoutTimestamp >= :to)')
+                    ->setParameter('from', $params['from'])
+                    ->setParameter('to', $params['to']);
+            } else if (isset($params['from'])) {
+                $qb->andWhere('s.loginTimestamp >= :from')
+                    ->setParameter('from', $params['from']);
+            } else if (isset($params['to'])) {
+                $qb->andWhere('s.logoutTimestamp <= :to')
+                    ->setParameter('to', $params['to']);
+            }
+        }
+
+        return $query->getQuery()->getResult();
+    }
 }

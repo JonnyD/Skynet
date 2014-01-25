@@ -25,11 +25,11 @@ class PlayerManager
         return $this->playerRepository->findAllOrderedByTimestamp();
     }
 
-    public function getOnlinePlayers($timestamp)
+    public function getPlayersOnline($params)
     {
-        if ($timestamp != null && !empty($timestamp)) {
-            return $this->playerRepository->findOnlineAtTimestamp($timestamp);
+        if ($params) {
+            return $this->playerRepository->findPlayersOnlineByParams($params);
         }
-        return $this->playerRepository->findOnlineOrderedByTimestamp();
+        return $this->playerRepository->findPlayersOnline();
     }
 }

@@ -10,22 +10,6 @@ use FOS\RestBundle\Controller\Annotations\QueryParam;
 class APIPlayerController extends Controller
 {
 
-    public function showAction($username)
-    {
-        $playerManager = $this->get('civplanet.player_manager');
-        $player = $playerManager->getPlayer($username);
-
-        $sessionManager = $this->get('civplanet.session_manager');
-        $test = $sessionManager->getSessions();
-        print_r($test);
-
-        return $this->render('CPBundle:Player:showPlayer.html.twig', array(
-                'player' => $player,
-                'sessions' => $test
-            )
-        );
-    }
-
     public function getPlayersAction()
     {
         $playerManager = $this->get('civplanet.player_manager');
@@ -37,15 +21,28 @@ class APIPlayerController extends Controller
     /**
      * @View(serializerGroups={"online"})
      * @QueryParam(name="at", nullable=true)
+     * @QueryParam(name="from", nullable=true)
+     * @QueryParam(name="to", nullable=true)
      */
     public function getOnlineAction(ParamFetcher $paramFetcher)
     {
+        $params = array();
         foreach ($paramFetcher->all() as $criterionName => $criterionValue) {
-            $timestamp = $criterionValue;
+            if (isset($criterionValue) && $criterionValue != null) {
+                if ($criterionName === 'at') {
+                    $params['at'] = $criterionValue;
+                } else {
+                    if ($criterionName === 'from') {
+                        $params['from'] = $criterionValue;
+                    } else if ($criterionName === 'to') {
+                        $params['to'] = $criterionValue;
+                    }
+                }
+            }
         }
 
         $playerManager = $this->get('civplanet.player_manager');
-        $players = $playerManager->getOnlinePlayers($timestamp);
+        $players = $playerManager->getPlayersOnline($params);
 
         return array("online" => $players);
     }
