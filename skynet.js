@@ -24,7 +24,7 @@ var options = {
   host: "mc.civcraft.vg", // optional
   port: 25565,       // optional
   username: "jonnyirl@ymail.com", // email and password are required only for
-  password: "***REMOVED***",          // online-mode=true servers
+  password: "avonmore21",          // online-mode=true servers
 };
 connect();
 
