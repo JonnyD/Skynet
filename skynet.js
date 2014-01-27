@@ -19,6 +19,15 @@ var options = {
 };
 connect();
 
+var bot;
+var options = {
+  host: "mc.civcraft.vg", // optional
+  port: 25565,       // optional
+  username: "jonnyirl@ymail.com", // email and password are required only for
+  password: "***REMOVED***",          // online-mode=true servers
+};
+connect();
+
 var antiAfkMessage = 'Hello, I am civplanet.com, this message is to avoid AFK. Type: /ignore civplanet if it gets annoying';
 var verboseLogging = true;
 var afkTimeout;
@@ -216,14 +225,6 @@ function findEventTimestamp(eventId, callback) {
   });
 }
     
-function addLogoutEvent(playerId, callback) {      
-  addEvent(playerId, 2, function(eventId) {
-    if (eventId > 0) {
-      logVerbose("Created logout: (" + playerId +")");
-    }
-  });
-}
-    
 function addSession(username, playerId, timestamp, loginEventId, callback) {
   var session = { player_id: playerId, login: loginEventId, login_timestamp: timestamp };
   connection.query('INSERT INTO session SET ?', session, function(err, result) {
@@ -232,25 +233,17 @@ function addSession(username, playerId, timestamp, loginEventId, callback) {
   });
 }
     
-function updateSession(sessionId, logoutEventId, logoutTimestamp, difference, callback) {
-  var session = { id: sessionId, logout: logoutEventId, duration: difference, logoutTimestamp: logoutTimestamp };
-  connection.query("UPDATE session SET logout = :logoutEventId, duration = :duration, logout_timestamp = :logoutTimestamp WHERE id = :sessionId", session, function(err, result) {
+function updateSession(sessionId, logoutEventId, logoutTimestamp, duration, callback) {
+  connection.query("UPDATE session SET logout = ?, duration = ?, logout_timestamp = ? WHERE id = ?", [logoutEventId, duration, logoutTimestamp, sessionId], function(err, result) {
+console.log("err " + err);
 	callback(1);
   });  
 }
     
 function findSession(playerId, callback) {
-  connection.query('SELECT id AS session_id, login AS loginEventId FROM session WHERE player_id = ' + playerId + ' AND logout IS NULL ORDER BY timestamp ASC LIMIT 1', function(error, rows, fields) {
+  connection.query('SELECT id AS session_id, login AS loginEvent FROM session WHERE player_id = ? AND logout IS NULL ORDER BY login_timestamp ASC LIMIT 1', [playerId], function(err, rows, fields) {
     if (rows.length > 0) {
-      callback(rows[0].session_id, rows[0].loginEventId);
-    }
-  });  
-}
-
-function countActiveSessions(playerId, callback) {
-  connection.query('SELECT count(*) as count_sessions FROM session WHERE logout IS NULL AND player_id = ' + playerId, function(error, rows, fields) {
-    if (rows.length > 0) {
-      callback(rows[0].count_sessions);
+      callback(rows[0].session_id, rows[0].loginEvent);
     }
   });  
 }
