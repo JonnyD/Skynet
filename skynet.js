@@ -10,13 +10,13 @@ var connection = mysql.createConnection({
   database : 'skynet'
 });
 connection.connect();
- 
+
 var bot;
 var options = {
   host: "mc.civcraft.vg", // optional
   port: 25565,       // optional
   username: "", // email and password are required only for
-  password: "",          // online-mode=true servers
+  password: "",          // online-mode=true server
 };
 connect();
 
