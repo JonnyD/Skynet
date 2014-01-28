@@ -10,7 +10,7 @@ var connection = mysql.createConnection({
   database : 'skynet'
 });
 connection.connect();
-
+ 
 var bot;
 var options = {
   host: "mc.civcraft.vg", // optional
