@@ -22,8 +22,6 @@ CREATE TABLE IF NOT EXISTS `player` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `username` varchar(32) NOT NULL,
   `timestamp` timestamp NOT NULL DEFAULT 0,
-  `last_login` timestamp NOT NULL DEFAULT 0,
-  `last_logout` timestamp NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `unique_username` (`username`),
