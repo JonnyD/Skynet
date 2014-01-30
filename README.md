@@ -96,8 +96,8 @@ connection.connect();
 * If the server you are connecting to uses the plugin Herochat to manage its chat, overwrite 
  mineflayer/lib/plugins/chat.js with [patch/chat.js] (https://github.com/JonnyD/Skynet/blob/master/patch/chat.js)
  
-### Website API
- * See [Skynet-Web] (https://github.com/JonnyD/Skynet-Web)
+### Website
+ * TODO documentation
  
 ## Examples
 * [http://civplanet.com] (http://civplanet.com)
