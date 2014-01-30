@@ -21,7 +21,7 @@ var options = {
 connect();
 
 var antiAfkMessage = 'Hello, I am civplanet.com, this message is to avoid AFK. Type: /ignore civplanet if it gets annoying';
-var verboseLogging = true;
+var verboseLogging = false;
 var afkTimeout;
 var afk1MinuteTimeout;
 var afk5MinutesTimeout;
@@ -61,7 +61,6 @@ function bindEvents(bot) {
       function(playerId, eventId, callback) {
         addSession(player.username, playerId, timestamp, eventId, function(sessionId) {
           logVerbose("[" + timestamp + "] Started session: " + sessionId + " for " + player.username + " (" + playerId +")");
-          updateLastLogin(playerId, timestamp);
           callback(null, playerId, sessionId);
         });
       }
@@ -319,10 +318,6 @@ function createPlayer(username, timestamp, callback) {
     logVerbose("[" + timestamp + "] " + "Created player: " + username + " (" + playerId + ")");
     callback(playerId);
   });
-}
-    
-function updateLastLogin(playerId, timestamp) {
-  connection.query("UPDATE player SET last_login = '" + timestamp + "' WHERE id = " + playerId);
 }
     
 function getTimestamp() {
