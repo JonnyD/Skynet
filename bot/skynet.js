@@ -103,7 +103,7 @@ function bindEvents(bot) {
     var timestamp = getTimestamp();
     console.log("[" + timestamp + "] I got kicked for", reason, "lol");
     clearTimeouts();
-
+    bot.end();
     async.series([
       function(callback) {
         console.log("logging out all players");
