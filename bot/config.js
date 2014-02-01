@@ -1,5 +1,9 @@
 var config = {};
 
+config.mysql = {};
+config.mc = {};
+config.settings = {};
+
 config.mysql.host = 'localhost';
 config.mysql.database = 'skynet'
 config.mysql.user = 'root';
@@ -13,5 +17,5 @@ config.mc.password = '';
 config.settings.owner = 'Gu3rr1lla';
 config.settings.antiAfkMessage = 'Hello, I am civplanet.com, this message is to avoid AFK. Type: /ignore civplanet if it gets annoying';
 config.settings.verboseLogging = false;
-fsfddsfsddsf
+
 module.exports = config;
