@@ -122,11 +122,11 @@ function bindEvents(bot) {
   });
 
   bot.on('spawn', function() {      
-    console.log("I spawned");
+    console.log("[" + getTimestamp() + "] I spawned");
   });
 
   bot.on('death', function() {
-    console.log("I died x.x.");
+    console.log("[" + getTimestamp() + "] I died x.x.");
   });
 }
 
