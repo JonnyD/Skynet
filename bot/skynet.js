@@ -33,7 +33,7 @@ function connect() {
 
 function bindEvents(bot) {
   bot.on('login', function() {
-    console.log("I logged in.");
+    console.log("[" + getTimestamp() + "] I logged in.");
     startAfkTimeout();
   });
 
@@ -100,10 +100,10 @@ function bindEvents(bot) {
   });
 
   bot.on('kicked', function(reason) {
-    console.log("I got kicked for", reason, "lol");
+    var timestamp = getTimestamp();
+    console.log("[" + timestamp + "] I got kicked for", reason, "lol");
     clearTimeouts();
 
-    var timestamp = getTimestamp();
     async.series([
       function(callback) {
         console.log("logging out all players");
