@@ -404,8 +404,8 @@ function startConnectionTimeout() {
 	}
 	nextAtConnection += 10 * 1000;
 
-	if (!connected) {
-		connect();
+  if (!connected) {
+	  connect();
 
 		afkTimeout = setTimeout(startConnectionTimeout, nextAtConnection - new Date().getTime());
 	}
