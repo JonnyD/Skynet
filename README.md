@@ -7,7 +7,7 @@ A Minecraft bot for logging player activity from multiplayer servers.
 
 ## Installation
 
- * (`npm install skynet-minecraft`)
+ * (`npm install skynet-minecraft@1.0.3`)
  * Create the database using the:
  
 ```sql

@@ -1,6 +1,6 @@
 {
   "name": "skynet-minecraft",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "create a minecraft bot that logs activity from a multiplayer server",
   "main": "./lib/skynet-minecraft.js",
   "repository": {
