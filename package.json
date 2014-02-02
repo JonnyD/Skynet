@@ -1,0 +1,17 @@
+{
+  "name": "skynet-minecraft",
+  "version": "1.0.2",
+  "description": "create a minecraft bot that logs activity from a multiplayer server",
+  "main": "./lib/skynet-minecraft.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/jonnyd/skynet.git"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "mineflayer": "1.0.0",
+    "moment": "2.5.1",
+    "mysql": "2.0.1",
+    "async": "0.2.10"
+  }
+}
