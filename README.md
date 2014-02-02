@@ -1,17 +1,14 @@
 Skynet (beta)
 ================
 
-A Minecraft bot for logging player activity on multiplayer servers.
+A Minecraft bot for logging player activity from multiplayer servers.
 
 ![](https://raw.github.com/JonnyD/Skynet/master/screenshot.png)
 
 ## Installation
 
- * [Install mineflayer] (https://github.com/superjoe30/mineflayer) (`npm install mineflayer`)
- * Install moment (`npm install moment`)
- * Install mysql (`npm install mysql`)
- * Install async (`npm install async`)
- * Create the database using the [following code] (http://sqlfiddle.com/#!2/32e4e9):
+ * (`npm install skynet`)
+ * Create the database using the:
  
 ```sql
 
@@ -33,6 +30,9 @@ CREATE TABLE IF NOT EXISTS `event_type` (
   `name` varchar(32) NOT NULL,
   PRIMARY KEY (`id`)
 );
+  
+INSERT INTO event_type (name) VALUES ('login');
+INSERT INTO event_type (name) VALUES ('logout');
 
 CREATE TABLE IF NOT EXISTS `event` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -69,28 +69,33 @@ ALTER TABLE `session`
   
 ```
 
-* Update Skynet.js with your own MySQL connection settings:
+* Update /lib/config.js with your own MySQL connection settings:
  
 ```js
- var connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : '',
-  database : 'skynet'
-});
-connection.connect();
+var config = {};
+
+config.mysql = {};
+config.mc = {};
+config.settings = {};
+
+config.mysql.host = 'localhost';
+config.mysql.database = 'skynet'
+config.mysql.user = 'root';
+config.mysql.password = '';
+
+config.mc.host = 'mc.civcraft.vg';
+config.mc.port = 25565;
+config.mc.username = '';
+config.mc.password = '';
+
+config.settings.owner = '';
+config.settings.antiAfkMessage = 'Hello, I am skynet, this message is to avoid AFK.';
+config.settings.verboseLogging = false;
+
+module.exports = config;
+
 ```
- 
- * Update Skynet.js with your own Minecraft server settings:
- 
-```js
- var options = {
-  host: "mc.civcraft.vg", // optional
-  port: 25565,       // optional
-  username: "", // email and password are required only for
-  password: "",          // online-mode=true servers
-};
- ```
+
 * If the server you are connecting to uses the plugin Herochat to manage its chat, overwrite 
  mineflayer/lib/plugins/chat.js with [patch/chat.js] (https://github.com/JonnyD/Skynet/blob/master/patch/chat.js)
  
