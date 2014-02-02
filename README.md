@@ -69,7 +69,7 @@ ALTER TABLE `session`
   
 ```
 
-* Update /lib/config.js with your own MySQL connection settings:
+* Update /lib/config.js with your own MySQL connection settings: 
  
 ```js
 var config = {};
@@ -97,7 +97,8 @@ module.exports = config;
 ```
 
 * If the server you are connecting to uses the plugin Herochat to manage its chat, overwrite 
- mineflayer/lib/plugins/chat.js with [patch/chat.js] (https://github.com/JonnyD/Skynet/blob/master/patch/chat.js)
+ mineflayer/lib/plugins/chat.js with [patch/chat.js] (https://github.com/JonnyD/Skynet/blob/master/patch/chat.js) (`mv chat.js ../node_modules/mineflayer/lib/plugins/`)
+ 
  
 ### Website
  * TODO documentation
