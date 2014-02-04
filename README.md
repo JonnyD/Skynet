@@ -99,6 +99,8 @@ module.exports = config;
 * If the server you are connecting to uses the plugin Herochat to manage its chat, overwrite 
  mineflayer/lib/plugins/chat.js with [patch/chat.js] (https://github.com/JonnyD/Skynet/blob/master/patch/chat.js) (`mv chat.js ../node_modules/mineflayer/lib/plugins/`)
  
+## Usage
+ * `node skynet-minecraft.js`
  
 ### Website
  * TODO documentation
