@@ -1,7 +1,7 @@
-var Database = require('./lib/database.js');
-var Repository = require('./repository/repository.js');
-var Service = require('./service/service.js');
-var Bot = require('./bot/bot.js');
+var Database = require('./database.js');
+var Repository = require('./repository.js');
+var Service = require('./service.js');
+var Bot = require('./bot.js');
 
 var config = require('configurizer').getVariables();
 var database = new Database(config);
