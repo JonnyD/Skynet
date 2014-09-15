@@ -1,0 +1,5 @@
+db_url: "mongodb://127.0.0.1/test"
+host: "mc.civcraft.vg"
+port: "25565"
+username: ""
+password: ""
